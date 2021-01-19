@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es-MX" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/cdn/head :: head"></head>
+<body>
+	<!-- 	Página para dar de alta categorias de gastos -->
+	<div data-role="page" id="categoriagasto">
+		<!-- 		Encabezado -->
+		<header data-role="header" data-position="fixed"
+			style="background: #173647;">
+			<a href="" id="btoncreargasto" data-role="button" data-iconpos="notext" data-icon="back" style="background: #173647;"></a>
+			<h1>
+				<img width="25%" height="25%" src="/public/img/header.svg" />
+			</h1>
+		</header>
+		<!-- 		Contenido principal -->
+		<section data-role="content">
+			<form id="formagregarcategoria" data-ajax="false">
+				<label for="categoria">Agregar categoría</label> 
+				<input type="text" id="textcategoria" placeholder="Captura la categoría" required="required" maxlength="100" minlength="2"/> 
+				<input type="submit" value="Agregar" data-theme="b" form="formagregarcategoria"/>
+			</form>
+			<ul data-role="listview" data-icon="delete" data-inset="true" id="listcategorias">
+				<li data-role="list-divider" style="background: #099268; color: #FFF; text-shadow: none">Categorías</li>
+			</ul>
+		</section>
+	</div>
+	<div th:replace="/cdn/script :: script"></div>
+	<script type="module" src="/public/categoriagasto.js"></script>
+</body>
+</html>

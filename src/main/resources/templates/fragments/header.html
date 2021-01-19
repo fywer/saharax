@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="es-MX" xmlns:th="http://www.thymeleaf.org">
+<header th:fragment="header" th:switch="${page}" data-role="header" data-position="fixed" style="background: #173647;">
+	<a th:case = "main" href="#menu" data-icon="bars" data-role="button" data-iconpos="notext" style="background: #173647;"></a>
+	<a th:case = "subpage" href="" id="btoncreargasto" data-role="button" data-iconpos="notext" data-icon="back" style="background: #173647;"></a>
+	<a th:case = "page" href="" id="btonhome" data-role="button" data-iconpos="notext" data-icon="home" style="background: #173647;"></a>
+	<h1>
+		<img width="25%" height="25%" src="/public/img/header.svg" />
+	</h1>
+	<a th:if="${page} == page" href="#" data-role="button" data-iconpos="notext" data-icon="gear" style="background: #173647;" ></a>
+</header>
+</html>

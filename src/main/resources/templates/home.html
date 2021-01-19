@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es-MX" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/cdn/head :: head"></head>
+<body>
+	<!-- 	Página de bienvenida -->
+	<div data-role="page" id="home">
+		<!-- 		Menú Lateral -->
+		<nav th:replace="/fragments/panel :: panel"></nav>
+		<!-- 		Encabezado -->
+		<header th:replace="/fragments/header :: header"></header>
+		<!-- 		Contenido Principal -->
+		<section data-role="content"></section>
+		<!-- 		Pie de página -->
+		<footer th:replace="/fragments/footer :: footer"></footer>
+	</div>
+	<div th:replace="/cdn/script :: script"></div>
+	<script type="module" src="/public/home.js"></script>
+</body>
+</html>

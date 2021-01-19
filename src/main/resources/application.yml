@@ -1,0 +1,54 @@
+# config context path to "/" by setting an empty string
+server:
+  contextPath:
+  port: 80
+  address: 0.0.0.0
+
+# JACKSON
+spring:
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+  datasource:
+    ## H2
+    #url: jdbc:h2:mem:mydb
+    ## MYSQL
+    url: jdbc:mysql://localhost/saharax
+    username: ifywerz
+    password: company
+    driver-class-name: com.mysql.jdbc.Driver
+    
+  #h2:
+  #  console:
+  #    enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    cache: false
+        
+  mvc:
+    static-path-pattern: /public/**
+    
+  resources:
+    static-locations: classpath:/static/,classpath:/controller/ 
+    
+jwt:
+  header: Authorization
+  secret: tasksSecret
+  expiration: 3600
+  route:
+    authentication:
+      path: auth
+      refresh: refresh
+      
+#logging:
+#  level:
+#    org.springframework:
+#      security: DEBUG
