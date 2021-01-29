@@ -3,21 +3,22 @@ import handler from "./util/handler.js";
 import util from "./util/util.js";
 import { Gasto } from "./modules/gasto.js";
 
-if (sessionStorage.getItem("token") == null) {
-	alertify.warning("El usuario no ha sido autentificado. Por favor, inicie sessión.");
-	window.location.replace('/')
-} else util.accessValidate();
-
 const displayCategorias = (categorias) => {
-	const selecategorias = document.querySelector("#selecategorias");
+	const selecategorias = document.querySelector("#formactualizargasto #selecategorias");
+	while (selecategorias.firstChild){
+ 		selecategorias.removeChild(selecategorias.firstChild);
+	};
 	categorias.forEach( categoria => {
 		let itemOption = document.createElement("option");		
 		itemOption.setAttribute('value', categoria.id);
 		itemOption.appendChild(document.createTextNode(categoria.dsCategoria));
 		selecategorias.appendChild(itemOption);
 	});
+	return new Promise( resolve => {
+		resolve(selecategorias);
+	});
 } 		
-const getCategorias = () => {
+const displayGasto = (gasto) => {
 	const url = '/categoria';
 	const request = {
 		method : 'GET',
@@ -30,22 +31,22 @@ const getCategorias = () => {
 	fetch(url, request).
 	then(handler.responseJson).
 	then(displayCategorias).
+	then(selecategorias => {
+		for (let i = 0; i < selecategorias.length; i ++) {
+			if (selecategorias[i].text === gasto.getCategoria.getDsCategoria) {
+				selecategorias[i].selected = true;
+			}
+		}	
+		document.querySelector("#formactualizargasto #btonidgasto").value = gasto.getId;
+		document.querySelector("#formactualizargasto #btonfechagasto").value = gasto.getUltimaActualizacion;
+		document.querySelector("#formactualizargasto #nmromonto").value = gasto.getMonto.toFixed(2);
+		document.querySelector("#formactualizargasto #textdsgasto").value = gasto.getDsGasto;
+		$.mobile.changePage( "#gasto", {
+			role : 'page',
+			domCache: false
+		});
+	}).
 	catch(handler.error);
-}
-const displayGastoDialog = (gasto) => {
-	const selecategorias = document.querySelector("#selecategorias");
-	for (let i = 0; i < selecategorias.length; i ++) {
-		if (selecategorias[i].text === gasto.getCategoria.getDsCategoria) {
-			selecategorias[i].selected = true;
-		}
-	}	
-	document.getElementById("btonidgasto").value = gasto.getId;
-	document.getElementById("btonfechagasto").value = gasto.getUltimaActualizacion;
-	document.getElementById("nmromonto").value = gasto.getMonto.toFixed(2);
-	document.getElementById("textdsgasto").value = gasto.getDsGasto;
-	$.mobile.changePage( "#gastodialog", {
-		role : 'dialog'
-	});
 }
 const createItemList = (gasto) => {
 	let itemList = document.createElement("li");
@@ -74,18 +75,17 @@ const createItemList = (gasto) => {
 		fetch(url, request).
 		then(handler.responseJson).
 		then(Gasto.parseGasto).
-		then(displayGastoDialog).
+		then(displayGasto).
 		catch(handler.error);
 	});
 	itemList.appendChild(itemLink);
 	return itemList;
 }
-const createItemListDivider = (gasto, sumatoriapordia) => {
+const createItemListDivider = (diadelgasto, sumatoriapordia) => {
 	let itemList = document.createElement("li");
 	itemList.setAttribute('data-role', "list-divider");
 	itemList.setAttribute('style', "background: #099268; color: #FFF; text-shadow: none;");
-	let mensaje = `${gasto.getDiaSemanaFormat}, ${gasto.getDia} de ${gasto.getMesFormat}`
-	itemList.appendChild(document.createTextNode(mensaje));
+	itemList.appendChild(document.createTextNode(diadelgasto));
 	let itemspansumapordia = document.createElement("span");
 	itemspansumapordia.setAttribute('class', 'ui-li-count');
 	itemspansumapordia.appendChild(document.createTextNode("$" + sumatoriapordia.toFixed(2)));
@@ -99,10 +99,14 @@ const createItemListView  = (gastospormes) => {
 	let sumatoriapordia = 0;
 	let itemsListOfGasto = [];
 	let i = 0;
+	//gastospormes.length;
 	for (;i < gastospormes.length; i++) {
 		if(dia != gastospormes[i].getDia) {
+			if (sumatoriapordia == 0) continue
 			i = i - 1; //le resto el indice porque la condicional hace que el gasto actual se omita.
-			let itemListDivider = createItemListDivider(gastospormes[i], sumatoriapordia);
+			let gastotemp = gastospormes[i];
+			let diadelgasto = `${gastotemp.getDiaSemanaFormat}, ${gastotemp.getDia} de ${gastotemp.getMesFormat}`
+			let itemListDivider = createItemListDivider(diadelgasto, sumatoriapordia);
 			itemListView.appendChild(itemListDivider); //añado la división de los gastos con la sumatoria por día.
 			itemsListOfGasto.forEach( itemListGasto => {
 				itemListView.appendChild(itemListGasto);	
@@ -118,7 +122,9 @@ const createItemListView  = (gastospormes) => {
 	}
 	if (itemsListOfGasto.length > 0) { //puede ser que se haya quedado gastos despues de terminar el recorrido de gastos.
 		i = i - 1; //le resto el indice porque la condicional hace que el gasto actual se omita.
-		let itemListDivider = createItemListDivider(gastospormes[i], sumatoriapordia);
+		let gastotemp = gastospormes[i];
+		let diadelgasto = `${gastotemp.getDiaSemanaFormat}, ${gastotemp.getDia} de ${gastotemp.getMesFormat}`
+		let itemListDivider = createItemListDivider(diadelgasto, sumatoriapordia);
 		itemListView.appendChild(itemListDivider); //añado la división de los gastos con la sumatoria por día.
 		itemsListOfGasto.forEach( itemListGasto => {
 			itemListView.appendChild(itemListGasto);	
@@ -127,25 +133,28 @@ const createItemListView  = (gastospormes) => {
 	return itemListView;
 }
 const displayGastos = (data) => {
+	console.warn(data);
 	const setgastos = document.querySelector("#setgastos");
 	while (setgastos.firstChild){
  		setgastos.removeChild(setgastos.firstChild);
 	};	
-	data.forEach(gastospormes => {
-		let indicemes = 0;
+	data.forEach(gastospordia => {
+		let indicedia = 0;
 		let agrupado = false;
-		if(gastospormes.length > 0) {
+		if(gastospordia.length > 0) {
 			let itemCollapsible = document.createElement("div");
 			itemCollapsible.setAttribute('data-role',"collapsible");
+			itemCollapsible.setAttribute('data-mini', "true");
 			if (agrupado == false) {
-				let itemParagraphMes = document.createElement("h2");
-				let objtemp = gastospormes[indicemes]; //exclusivo para obtener el mes y año
-				itemParagraphMes.appendChild(document.createTextNode(`${objtemp.getMesFormat} ${objtemp.getAnio}`));
-				itemCollapsible.appendChild(itemParagraphMes);
+				let itemParagraphDia = document.createElement("h2");
+				let gastotemp = gastospordia[indicedia];
+				let diadelgasto = `${gastotemp.getDia} de ${gastotemp.getMesFormat}`
+				itemParagraphDia.appendChild(document.createTextNode(diadelgasto));
+				itemCollapsible.appendChild(itemParagraphDia);
 				agrupado = true;
-				indicemes += 1;
+				indicedia += 1;
 			}
-			let itemListView = createItemListView(gastospormes);	
+			let itemListView = createItemListView(gastospordia);	
 			itemCollapsible.appendChild(itemListView);
 			setgastos.appendChild(itemCollapsible);
 		}
@@ -153,7 +162,7 @@ const displayGastos = (data) => {
 	$("#setgastos").collapsibleset().trigger("create")
 } 
 const getGastos = () => {
-	const url = '/gasto';
+	const url = '/gasto/year/2021?mes=1'
 	const request = {
 		method : 'GET',
 		headers : {
@@ -165,7 +174,7 @@ const getGastos = () => {
 	fetch(url, request).
 	then(handler.responseJson).
 	then(Gasto.parseGastos).
-	then(Gasto.agruparGastosPorMes).
+	then(Gasto.agruparGastosPorDia).
 	then(displayGastos).	
 	catch(handler.error);
 }
@@ -173,11 +182,11 @@ const updateGasto = (event) => {
 	document.querySelector("[form=formactualizargasto]").disabled = true;
 	const url = '/gasto';
 	event.preventDefault();
-	let idGasto = parseInt( document.getElementById("btonidgasto").value, 10 ); 
-	let idCategoria = parseInt( document.getElementById('selecategorias').value, 10 );
-	let ultimaActualizacion = document.getElementById('btonfechagasto').value;
-	let monto = parseFloat(document.getElementById('nmromonto').value);
-	let textdsgasto = document.getElementById('textdsgasto').value;
+	let idGasto = parseInt(document.querySelector("#formactualizargasto #btonidgasto").value, 10 ); 
+	let idCategoria = parseInt( document.querySelector("#formactualizargasto #selecategorias").value, 10 );
+	let ultimaActualizacion = document.querySelector("#formactualizargasto #btonfechagasto").value;
+	let monto = parseFloat(document.querySelector("#formactualizargasto #nmromonto").value);
+	let textdsgasto = document.querySelector("#formactualizargasto #textdsgasto").value;
 	let dsGasto = util.stringCleaner(new String(textdsgasto));
 	try{
 		if (dsGasto.length < 2 || dsGasto.length > 100) {
@@ -211,14 +220,15 @@ const updateGasto = (event) => {
 	then(handler.responseJson).
 	then( data => {
 		alertify.success("Se ha actualizado con exito el gasto.");
+		document.querySelector("[form=formactualizargasto]").disabled = false;
 		$.mobile.changePage( "#leergastos", {
 			role : 'page'
 		});
-		document.querySelector("[form=formactualizargasto]").disabled = false;
 	}).
 	catch(handler.error)
 }
 const deleteGasto = (event) => {
+	event.preventDefault();
 	document.querySelector("[id=btoneliminargasto]").disabled = true;
 	document.querySelector("[form=formactualizargasto]").disabled = true;
 	alertify.confirm("¿Esta seguro de eliminar el gasto?",
@@ -262,21 +272,12 @@ const deleteGasto = (event) => {
 		return;
 	});
 }
-window.addEventListener('load', (event) => {
+$(document).on("pageshow", "#leergastos", (data) => {
 	getGastos();
-	const btoncreargasto = document.getElementById("btoncreargasto");
-	btoncreargasto.addEventListener("click", () => {
-		window.location.replace("/creargasto")
-	});
-	getCategorias();
-	const btonhome = document.getElementById('btonhome');
-	btonhome.addEventListener("click", () => {
-		window.location.replace("/home")
-	});
-}); 
+});
 
-$(document).on("pageshow", "#gastodialog", (data) => {
-	$("#selecategorias").selectmenu("refresh");
+$(document).on("pageshow", "#gasto", (data) => {
+	$("#formactualizargasto #selecategorias").selectmenu("refresh");
 	const formactualizargasto = document.getElementById("formactualizargasto");
 	formactualizargasto.addEventListener("submit", updateGasto);
 	const btoneliminargasto = document.getElementById("btoneliminargasto");

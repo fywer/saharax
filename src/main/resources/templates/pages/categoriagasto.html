@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es-MX" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="categoriagasto" data-role="page" id="categoriagasto">
+	<!-- 		Encabezado -->
+	<header data-role="header" data-position="fixed" style="background: #173647;">
+		<a href="#creargasto" id="btoncreargasto" data-role="button" data-iconpos="notext" data-icon="back" style="background: #173647;"></a>
+		<h1>
+			<img width="25%" height="25%" src="/public/img/header.svg" />
+		</h1>
+	</header>
+	<!-- 		Contenido principal -->
+	<section data-role="content">
+		<form id="formagregarcategoria" data-ajax="false">
+			<label for="categoria">Agregar categoría</label>
+			<input type="text" id="textcategoria" placeholder="Captura la categoría" required="required" maxlength="100" minlength="2" />
+			<input type="submit" value="Agregar" data-theme="b" form="formagregarcategoria" />
+		</form>
+		<ul data-role="listview" data-icon="delete" data-inset="true" id="listcategorias">
+		</ul>
+	</section>
+	<script type="module" src="/public/categoriagasto.js"></script>
+</div>
+</html>

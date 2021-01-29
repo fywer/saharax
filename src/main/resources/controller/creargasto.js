@@ -3,21 +3,19 @@ import handler from "./util/handler.js"
 import util from "./util/util.js";
 import { Categoria } from "./modules/categoria.js";
 
-if (sessionStorage.getItem("token") == null) {
-	alertify.warning("El usuario no ha sido autentificado. Por favor, inicie sessión.");
-	window.location.replace('/')
-} else util.accessValidate();
-
-const displaySetCategorias = (categorias) => {
-	const selecategorias = document.querySelector("#selecategorias");
+const displayCategorias = (categorias) => {
+	const selecategorias = document.querySelector("#formguardargasto #selecategorias");
+	while (selecategorias.firstChild){
+ 		selecategorias.removeChild(selecategorias.firstChild);
+	};
 	categorias.forEach( categoria => {
 		let itemOpcion = document.createElement("option");
 		itemOpcion.setAttribute('value', categoria.getId);
 		itemOpcion.appendChild(document.createTextNode(categoria.getDsCategoria));
 		selecategorias.appendChild(itemOpcion);
 	});
-	$("#selecategorias").selectmenu("refresh");
-} 		
+	$("#formguardargasto #selecategorias").selectmenu("refresh");
+}
 const getCategorias = () => {
 	const url = '/categoria';
 	const request = {
@@ -31,16 +29,16 @@ const getCategorias = () => {
 	fetch(url, request).
 	then(handler.responseJson).
 	then(Categoria.parseCategorias).
-	then(displaySetCategorias).
+	then(displayCategorias).
 	catch(handler.error);
 }
 const saveGasto = (event) => {
 	document.querySelector("[form=formguardargasto]").disabled = true;
 	const url = '/gasto';
 	event.preventDefault();
-	let idCategoria = parseInt(document.getElementById('selecategorias').value, 10);
-	let monto = parseFloat(document.getElementById('nmromonto').value);
-	let textdsgasto = document.getElementById('textdsgasto').value;
+	let idCategoria = parseInt(document.querySelector("#formguardargasto #selecategorias").value, 10);
+	let monto = parseFloat(document.querySelector("#formguardargasto #nmromonto").value);
+	let textdsgasto = document.querySelector("#formguardargasto #textdsgasto").value;
 	let dsGasto = util.stringCleaner(new String(textdsgasto));
 	try{
 		if (dsGasto.length < 2 || dsGasto.length > 100) {
@@ -72,27 +70,15 @@ const saveGasto = (event) => {
 	then(handler.responseJson).
 	then( gasto => {
 		alertify.success("Se ha guardado con exito el gasto.");
-		document.getElementById('nmromonto').value = "";
-		document.getElementById('textdsgasto').value = "";
+		document.querySelector("#formguardargasto #nmromonto").value = "";
+		document.querySelector("#formguardargasto #textdsgasto").value = "";
 		document.querySelector("[form=formguardargasto]").disabled = false;
 	}).
 	catch(handler.error).
 	catch( () => document.querySelector("[form=formguardargasto]").disabled = false);
 }	
-window.addEventListener('load', (event) => {
+$(document).on("pageshow", "#creargasto", (data) => {
+	getCategorias();
 	const formguardargasto = document.getElementById('formguardargasto');
 	formguardargasto.addEventListener("submit", saveGasto);
-	const btoninsertcategoria = document.getElementById('btoncategoria');
-	btoninsertcategoria.addEventListener("click", () => {
-		window.location.replace("/categoriagasto");
-	});
-	getCategorias();
-	const btonhome = document.getElementById('btonhome');
-	btonhome.addEventListener("click", () => {
-		window.location.replace("/home");
-	});
-	const btonleergastos = document.getElementById('btonleergastos');
-	btonleergastos.addEventListener("click", () => {
-		window.location.replace("/gastos");
-	});
 });

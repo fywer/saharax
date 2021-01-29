@@ -9,4 +9,7 @@ public interface GastoRepository extends JpaRepository<Gasto, Long> {
     //User findByUsername(String username);
 	@Query("FROM Gasto ORDER BY ultimaActualizacion ASC")
 	List<Gasto> findAllOrderByDate(); 
+	
+	@Query("FROM Gasto WHERE YEAR(ultimaActualizacion) = ?1 AND MONTH(ultimaActualizacion) = ?2 ORDER BY ultimaActualizacion DESC")
+	List<Gasto> findAllByYearAndMonth(int year, int month);
 }

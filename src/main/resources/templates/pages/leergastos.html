@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es-MX" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="leergastos" data-role="page" id="leergastos">
+	<!-- 		Encabezado -->
+	<header th:replace="/fragments/header"></header>
+	<!-- 		Contenido principal -->
+	<section data-role="content">
+		<div data-role="collapsibleset" id="setgastos">	
+		</div>
+	</section>
+	<!-- 		Pie de página -->
+	<footer th:replace="/fragments/footer"> </footer>
+	<script type="module" src="/public/leergastos.js"></script>	
+</div>
+</html>

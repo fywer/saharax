@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="es-MX" xmlns:th="http://www.thymeleaf.org">
 <!-- Dialogo para editar o elimnar un gasto -->
-<div th:fragment="gasto" data-role="dialog" id="gastodialog">
+<div th:fragment="gasto" data-role="page" id="gasto" >
 <!-- 	Encabezado -->
-	<header data-role="header">
-		<h1>Detalle Gasto</h1>
-  	</header>
+	<header data-role="header" data-position="fixed" style="background: #173647;">
+		<a href="#leergastos" id="btoncreargasto" data-role="button" data-iconpos="notext" data-icon="back" style="background: #173647;"></a>
+		<h1>
+			<img width="25%" height="25%" src="/public/img/header.svg" />
+		</h1>
+	</header>
 <!--   	Contenido principal -->
   	<section data-role="content">
   		<form id="formactualizargasto" data-ajax="false">

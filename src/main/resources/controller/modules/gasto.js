@@ -128,40 +128,21 @@ class Gasto {
 	static parseGastos(data) {
 		let gastos = []
 		data.forEach( item => {
-			let ultimaActualizacion = new Date(item.ultimaActualizacion);
-			let id = item.id;
-			let dsGasto = item.dsGasto;
-			let monto = item.monto;
-			let dia = ultimaActualizacion.getDate();
-			let mes = ultimaActualizacion.getMonth();
-			let anio = ultimaActualizacion.getFullYear();
-			let diasemana = ultimaActualizacion.getDay();
-			let categoria = item.categoria;
-			let gasto = new Gasto(
-				id,
-				dsGasto,
-				monto,
-				dia,
-				mes,
-				anio,
-				diasemana,
-				new Intl.DateTimeFormat('fr-ca').format(ultimaActualizacion).replace("/", "-").replace("/", "-"),
-				new Categoria(categoria.id, categoria.dsCategoria)
-			);
+			let gasto = new Gasto().parser(item);
 			gastos.push(gasto);
 		});
 		return new Promise( (resolve, reject) => {
 			resolve(gastos);
 		});		
 	}
-	static agruparGastosPorMes(data) {
-		let gastospormes = [];
-		for(let i = 0; i < 12; i ++) {
-			gastospormes.push(data.filter( gasto => gasto.getMes == i));
+	static agruparGastosPorDia(data) {
+		let gastospordia = [];
+		for(let i = 31; i > 0; i --) {
+			gastospordia.push(data.filter( gasto => gasto.getDia == i));
 		}
-		localStorage.setItem('gastos', JSON.stringify(gastospormes));
+		localStorage.setItem('gastos', JSON.stringify(gastospordia));
 		return new Promise( resolve => {
-			resolve(gastospormes);
+			resolve(gastospordia);
 		});
 	}
 }

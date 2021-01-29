@@ -3,11 +3,6 @@ import handler from "./util/handler.js";
 import util from "./util/util.js";
 import { Categoria } from "./modules/categoria.js";
 
-if (sessionStorage.getItem("token") == null) {
-	alertify.warning("El usuario no ha sido autentificado. Por favor, inicie sessión.");
-	window.location.replace('/')
-} else util.accessValidate();
-
 const createItemLink = (categoria) => {
 	let itemLink = document.createElement("a");
 	itemLink.setAttribute('id', categoria.getId);
@@ -48,6 +43,9 @@ const displayListCategoria = (categoria) => {
 }		
 const displayListCategorias = (categorias) => {
 	const listcategorias = document.querySelector("#listcategorias");
+	while (listcategorias.firstChild){
+ 		listcategorias.removeChild(listcategorias.firstChild);
+	};
 	categorias.forEach( categoria => {
 		let itemList = document.createElement("li");
 		let itemLink = createItemLink(categoria);
@@ -106,12 +104,8 @@ const getCategorias = () => {
 	then(displayListCategorias).
 	catch(handler.error);
 }
-window.addEventListener("load", (event) => {
+$(document).on("pageshow", "#categoriagasto", (data) => {
+	getCategorias();
 	const formagregarcategoria = document.getElementById('formagregarcategoria');
 	formagregarcategoria.addEventListener("submit", saveCategoria);
-	const btoncreargasto = document.getElementById('btoncreargasto');
-	btoncreargasto.addEventListener("click", () => {
-		window.location.replace('/creargasto');		
-	});
-	getCategorias();			
-})
+});

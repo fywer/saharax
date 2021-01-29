@@ -4,10 +4,12 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -20,7 +22,12 @@ public class GastoRestController {
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Gasto> findAll() {
-        return gastoRepository.findAllOrderByDate();
+    	return gastoRepository.findAllOrderByDate();
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "/year/{anio}")
+    public List<Gasto> findAllByYearAndMonth(@PathVariable int anio,  @RequestParam("mes") int mes) {
+		return gastoRepository.findAllByYearAndMonth(anio, mes);
     }
     
 	@RequestMapping(method = RequestMethod.GET, value = "/{gastoId}")
