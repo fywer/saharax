@@ -12,4 +12,10 @@ public interface GastoRepository extends JpaRepository<Gasto, Long> {
 	
 	@Query("FROM Gasto WHERE YEAR(ultimaActualizacion) = ?1 AND MONTH(ultimaActualizacion) = ?2 ORDER BY ultimaActualizacion DESC")
 	List<Gasto> findAllByYearAndMonth(int year, int month);
+	
+	@Query("SELECT DISTINCT YEAR(ultimaActualizacion) FROM Gasto ORDER BY YEAR(ultimaActualizacion) ASC")
+	List<Object> findUltimateYears();
+	
+	@Query("SELECT DISTINCT MONTH(ultimaActualizacion) FROM Gasto WHERE YEAR(ultimaActualizacion) = ?1")
+	List<Object> findMonths(int year);
 }

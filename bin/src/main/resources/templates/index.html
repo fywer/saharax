@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es-MX" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/cdn/head :: head"></head>
+<body>
+	<!-- Página para acceder al aplicativo -->
+	<div data-role="page" id="creargasto">
+		<!-- Encabezado -->
+		<header data-role="header" data-position="fixed" style="background: #173647;">
+			<h1>
+				<img width="25%" height="25%" src="/public/img/header.svg" />
+			</h1>
+		</header>
+		<!-- Principal -->
+		<section data-role="content">
+			<form id="formsignin" data-ajax="false">
+				<div style="padding: 10px 20px;">
+					<h3>Please sign in</h3>
+					<input type="text" id="textuser" placeholder="username" required="required" maxlength="50" minlength="2" />
+					<input type="password" id="textpass" placeholder="password" required="required" maxlength="100" minlength="5"/>
+					<input type="submit" data-icon="user" value="Sign in" data-theme="b" form="formsignin" />
+				</div>
+			</form>
+		</section>
+		<!--Pie de la página-->
+		<footer style="text-align: center" data-role="footer" data-theme="b" data-position="fixed">
+			<small>2020 Copyright &copy; ifywerz company</small> <br /> 
+			<small>Todos los derechos reservados.</small>
+		</footer>
+	</div>
+	<div th:replace="/cdn/script :: script"></div>
+	<script type="module" src="/public/index.js"></script>
+</body>
+</html>

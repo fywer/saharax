@@ -30,6 +30,16 @@ public class GastoRestController {
 		return gastoRepository.findAllByYearAndMonth(anio, mes);
     }
     
+    @RequestMapping(method = RequestMethod.GET, value = "/years")
+    public List<Object> findUltimateYears() {
+		return gastoRepository.findUltimateYears();
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "/months/{anio}")
+    public List<Object> findMonths(@PathVariable int anio) {
+		return gastoRepository.findMonths(anio);
+    }
+    
 	@RequestMapping(method = RequestMethod.GET, value = "/{gastoId}")
     public Gasto findOne(@PathVariable Long gastoId) {
         return gastoRepository.findOne(gastoId);
@@ -42,7 +52,7 @@ public class GastoRestController {
 
 	@RequestMapping(method = RequestMethod.PUT)
     public Gasto update(@RequestBody Gasto gasto) {
-		gasto.getUltimaActualizacion().add(Calendar.DAY_OF_MONTH, 1);
+		//gasto.getUltimaActualizacion().add(Calendar.DAY_OF_MONTH, 1);
         return gastoRepository.save(gasto);
     }
 	
@@ -50,6 +60,7 @@ public class GastoRestController {
     public void delete(@PathVariable Long gastoId) {
         gastoRepository.delete(gastoId);
     }
+	
 	
 }
 

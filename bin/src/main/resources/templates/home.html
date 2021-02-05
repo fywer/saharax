@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es-MX" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/cdn/head :: head"></head>
+<body>
+	<!-- 	Página de bienvenida -->
+	<div data-role="page" id="home">
+		<!-- 		Menú Lateral -->
+		<nav th:replace="/fragments/panel :: panel"></nav>
+		<!-- 		Encabezado -->
+		<header th:replace="/fragments/header :: header"></header>
+		<!-- 		Contenido Principal -->
+		<section data-role="content"></section>
+		<!-- 		Pie de página -->
+		<footer th:replace="/fragments/footer :: footer"></footer>
+	</div>
+	<!-- 	Dialogo para actualizar un gasto -->
+	<div th:replace="/pages/gasto :: gasto"></div>
+	<!-- 	Página para leer los gastos -->
+	<div th:replace="/pages/leergastos :: leergastos"></div>	
+	<!-- 	Página para registrar gastos -->
+	<div th:replace="/pages/creargasto :: creargasto"></div>
+	<!-- 	Página para dar de alta categorias de gastos -->
+	<div th:replace="/pages/categoriagasto :: categoriagasto"></div>	
+	
+	<div th:replace="/cdn/script :: script"></div>
+	<script type="module" src="/public/home.js"></script>
+	
+</body>
+</html>
