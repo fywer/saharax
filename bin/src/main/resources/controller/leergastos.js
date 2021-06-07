@@ -5,9 +5,6 @@ import { Gasto } from "./modules/gasto.js";
 
 const displayCategorias = (categorias) => {
 	const selecategorias = document.querySelector("#formactualizargasto #selecategorias");
-	while (selecategorias.firstChild){
- 		selecategorias.removeChild(selecategorias.firstChild);
-	};
 	categorias.forEach( categoria => {
 		let itemOption = document.createElement("option");		
 		itemOption.setAttribute('value', categoria.id);
@@ -99,7 +96,6 @@ const createItemListView  = (gastospormes) => {
 	let sumatoriapordia = 0;
 	let itemsListOfGasto = [];
 	let i = 0;
-	//gastospormes.length;
 	for (;i < gastospormes.length; i++) {
 		if(dia != gastospormes[i].getDia) {
 			if (sumatoriapordia == 0) continue
@@ -107,7 +103,7 @@ const createItemListView  = (gastospormes) => {
 			let gastotemp = gastospormes[i];
 			let diadelgasto = `${gastotemp.getDiaSemanaFormat}, ${gastotemp.getDia} de ${gastotemp.getMesFormat}`
 			let itemListDivider = createItemListDivider(diadelgasto, sumatoriapordia);
-			itemListView.appendChild(itemListDivider); //añado la división de los gastos con la sumatoria por día.
+			itemListView.appendChild(itemListDivider); //aï¿½ado la divisiï¿½n de los gastos con la sumatoria por dï¿½a.
 			itemsListOfGasto.forEach( itemListGasto => {
 				itemListView.appendChild(itemListGasto);	
 			});
@@ -125,7 +121,7 @@ const createItemListView  = (gastospormes) => {
 		let gastotemp = gastospormes[i];
 		let diadelgasto = `${gastotemp.getDiaSemanaFormat}, ${gastotemp.getDia} de ${gastotemp.getMesFormat}`
 		let itemListDivider = createItemListDivider(diadelgasto, sumatoriapordia);
-		itemListView.appendChild(itemListDivider); //añado la división de los gastos con la sumatoria por día.
+		itemListView.appendChild(itemListDivider); //aï¿½ado la divisiï¿½n de los gastos con la sumatoria por dï¿½a.
 		itemsListOfGasto.forEach( itemListGasto => {
 			itemListView.appendChild(itemListGasto);	
 		});
@@ -133,18 +129,14 @@ const createItemListView  = (gastospormes) => {
 	return itemListView;
 }
 const displayGastos = (data) => {
-	console.warn(data);
 	const setgastos = document.querySelector("#setgastos");
-	while (setgastos.firstChild){
- 		setgastos.removeChild(setgastos.firstChild);
-	};	
+	util.componentCleaner(setgastos);
 	data.forEach(gastospordia => {
 		let indicedia = 0;
 		let agrupado = false;
 		if(gastospordia.length > 0) {
 			let itemCollapsible = document.createElement("div");
 			itemCollapsible.setAttribute('data-role',"collapsible");
-			itemCollapsible.setAttribute('data-mini', "true");
 			if (agrupado == false) {
 				let itemParagraphDia = document.createElement("h2");
 				let gastotemp = gastospordia[indicedia];
@@ -161,8 +153,8 @@ const displayGastos = (data) => {
 	});
 	$("#setgastos").collapsibleset().trigger("create")
 } 
-const getGastos = () => {
-	const url = '/gasto/year/2021?mes=1'
+const getGastos = (anio, mes) => {
+	const url = "/gasto/year/".concat(anio)+"?mes=".concat(mes)
 	const request = {
 		method : 'GET',
 		headers : {
@@ -190,8 +182,8 @@ const updateGasto = (event) => {
 	let dsGasto = util.stringCleaner(new String(textdsgasto));
 	try{
 		if (dsGasto.length < 2 || dsGasto.length > 100) {
-			alertify.warning("La descripción debe tener al menos 2 caracteres y menos de 100.");
-			throw "La descripción debe tener al menos 2 caracteres y menos de 100.";
+			alertify.warning("La descripciÃ³n debe tener al menos 2 caracteres y menos de 100.");
+			throw "La descripciÃ³n debe tener al menos 2 caracteres y menos de 100.";
 		}	
 	} catch (e) {
 		console.warn(e);
@@ -231,7 +223,7 @@ const deleteGasto = (event) => {
 	event.preventDefault();
 	document.querySelector("[id=btoneliminargasto]").disabled = true;
 	document.querySelector("[form=formactualizargasto]").disabled = true;
-	alertify.confirm("¿Esta seguro de eliminar el gasto?",
+	alertify.confirm("Â¿Esta seguro de eliminar el gasto?",
 	() => { 
 		const idGasto = document.getElementById("btonidgasto").value;
 		const url = "/gasto".concat("/"+idGasto);
@@ -259,7 +251,6 @@ const deleteGasto = (event) => {
 			localStorage.setItem('gastos', JSON.stringify(datatemp));
 			document.querySelector("[id=btoneliminargasto]").disabled = false;					
 			document.querySelector("[form=formactualizargasto]").disabled = false;
-			displayGastos(datatemp);
 			$.mobile.changePage( "#leergastos", {
 				role : 'page'
 			});
@@ -272,8 +263,114 @@ const deleteGasto = (event) => {
 		return;
 	});
 }
+
+const displayYears = (anios) => {
+	const seleanios = document.querySelector("#formbuscargasto #seleanios");
+	util.componentCleaner(seleanios);
+	let primerValor = false;
+	let indice = 0;
+	do {
+		let itemOption = document.createElement('option');
+		if (primerValor == true) {
+			itemOption.setAttribute('value', anios[indice]);
+			itemOption.appendChild(document.createTextNode(anios[indice]));	
+			seleanios.appendChild(itemOption)
+		} else {
+			itemOption.setAttribute('value', 0);
+			itemOption.appendChild(document.createTextNode("Seleccionar"));
+			primerValor = true;
+			seleanios.appendChild(itemOption)
+			continue;	
+		}
+		indice += 1;
+	} while(indice < anios.length);
+	$("#formbuscargasto #seleanios").selectmenu("refresh");
+	return new Promise( resolve => {
+		resolve(document.querySelector("#formbuscargasto #selemeses"));
+	});
+}
+
+const displayMeses = (meses) => {
+	const selemeses = document.querySelector("#formbuscargasto #selemeses");
+	util.componentCleaner(selemeses);
+	let primerValor = false;
+	let indice = 0;
+	do {
+		let itemOption = document.createElement('option');
+		if (primerValor == true) {
+			itemOption.setAttribute('value', meses[indice]);
+			itemOption.appendChild(document.createTextNode(util.mesFormat( meses[indice] ) ));	
+			selemeses.appendChild(itemOption)
+		} else {
+			itemOption.setAttribute('value', 0);
+			itemOption.appendChild(document.createTextNode("Seleccionar"));
+			primerValor = true;
+			selemeses.appendChild(itemOption)
+			continue;	
+		}
+		indice += 1;
+	} while(indice < meses.length);
+	$("#formbuscargasto #selemeses").selectmenu("refresh");
+}
+
+const getUltimateYears = () => {
+	const url = "/gasto/years";
+	const request = {
+		method : 'GET',
+		headers : {
+			'Content-Type' : 'application/json; charset=utf-8',
+			'Accept' : 'application/json',
+			'Authorization' : sessionStorage.getItem("token")
+		}	
+	}
+	fetch(url, request).
+	then(handler.responseJson).
+	then(displayYears).
+	then( selemeses => {
+		util.componentCleaner(selemeses);
+		let itemOption = document.createElement('option');
+		itemOption.setAttribute('value', 0);
+		itemOption.appendChild(document.createTextNode("Seleccionar"));
+		selemeses.appendChild(itemOption);
+		$("#formbuscargasto #selemeses").selectmenu("refresh");
+	}). 
+	catch(handler.error);
+}
+const getMonths = (anio) => {
+	const url = "/gasto/months/".concat(anio);
+	const request = {
+		method : 'GET',
+		headers : {
+			'Content-Type' : 'application/json; charset=utf-8',
+			'Accept': 'application/json',
+			'Authorization' : sessionStorage.getItem("token")
+		}
+	}
+	fetch(url, request).
+	then(handler.responseJson).
+	then(displayMeses).
+	catch(handler.error);
+}
 $(document).on("pageshow", "#leergastos", (data) => {
-	getGastos();
+	util.componentCleaner(document.querySelector("#setgastos"));
+	const seleanios = document.querySelector("#formbuscargasto #seleanios");
+	const selemeses = document.querySelector("#formbuscargasto #selemeses");
+	getUltimateYears();
+	seleanios.addEventListener("change", () => {
+		if (seleanios.value == 0) {
+			alertify.warning("Por favor, selecciona un aÃ±o.");
+			return;	
+		} else getMonths(seleanios.value);	
+	});
+	selemeses.addEventListener("change", () => {
+		if (selemeses.value == 0) {
+			alertify.warning("Por favor, selecciona un mes.");
+			return
+		} else if (seleanios.value == 0) {
+			alertify.warning("Por favor, selecciona un aÃ±o.");
+			return;
+		} else getGastos(seleanios.value, selemeses.value);
+	});
 });
 
 $(document).on("pageshow", "#gasto", (data) => {

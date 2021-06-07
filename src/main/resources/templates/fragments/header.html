@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<html lang="es-MX" xmlns:th="http://www.thymeleaf.org">
-<header th:fragment="header" data-role="header" data-position="fixed" style="background: #173647;">
-	<a href="#menu" data-icon="bars" data-role="button" data-iconpos="notext" style="background: #173647;"></a>
-	<h1>
-		<img width="25%" height="25%" src="/public/img/header.svg" />
-	</h1>
-	<a href="#" data-role="button" data-iconpos="notext" data-icon="gear" style="background: #173647;" ></a>
+<html lang='es-MX' xmlns:th='http://www.thymeleaf.org'>
+<header th:fragment="header">
+	<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+		<div class="navbar-brand">
+			<a class="navbar-item" href="/home">
+				<img src="https://bulma.io/images/bulma-logo-white.png" alt="Administrador de gastos" width="112" height="28" />
+			</a>
+			<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="true">
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+			</a>
+		</div>
+		<div class="navbar-menu is-active">
+			<div class="navbar-start">
+				<!-- navbar items -->
+				<a class="navbar-item"> Home </a>
+				<div class="navbar-item has-dropdown is-hoverable">
+					<a class="navbar-link"> Comprobante </a>
+					<div class="navbar-dropdown">
+						<a class="navbar-item"> Gastos </a>
+						<a id="creargasto" class="navbar-item"> Anotar Gasto </a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
 </header>
+
 </html>

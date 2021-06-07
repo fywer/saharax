@@ -12,7 +12,6 @@ const displayCategorias = (categorias) => {
 		itemOpcion.appendChild(document.createTextNode(categoria.getDsCategoria));
 		selecategorias.appendChild(itemOpcion);
 	});
-	$("#formguardargasto #selecategorias").selectmenu("refresh");
 }
 const getCategorias = () => {
 	const url = '/categoria';
@@ -41,7 +40,7 @@ const saveGasto = (event) => {
 	try{
 		if (dsGasto.length < 2 || dsGasto.length > 100) {
 			alertify.warning("La descripci�n debe tener al menos 2 caracteres y menos de 100.");
-			throw "La descripci�n debe tener al menos 2 caracteres y menos de 100.";
+			throw "La descripción debe tener al menos 2 caracteres y menos de 100.";
 		}	
 	} catch (e) {
 		console.warn(e);
@@ -75,8 +74,12 @@ const saveGasto = (event) => {
 	catch(handler.error).
 	catch( () => document.querySelector("[form=formguardargasto]").disabled = false);
 }	
-$(document).on("pageshow", "#creargasto", (data) => {
+
+window.addEventListener("load", event => {
 	getCategorias();
 	const formguardargasto = document.getElementById('formguardargasto');
 	formguardargasto.addEventListener("submit", saveGasto);
+	const btoncategoria = document.getElementById('btoncategoria');
+	btoncategoria.addEventListener("click", () => {
+		window.location.replace('/home/categoriagasto');});
 });

@@ -1,35 +1,38 @@
 <!DOCTYPE html>
 <html lang="es-MX" xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="creargasto" data-role="page" id="creargasto">
+<head th:replace="/cdn/head :: head"></head>
+<body>
 	<!-- 		Encabezado -->
 	<header th:replace="/fragments/header :: header"></header>
-	<!-- 		Contenido principal -->
-	<section data-rol="content">
-		<form id="formguardargasto" data-ajax="false">
-			<fieldset class="ui-grid-a">
-				<div class="ui-block-a">
-					<select id="selecategorias">
-					</select>
-				</div>
-				<div class="ui-block-b">
-					<a href="#categoriagasto" id="btoncategoria" data-role="button">Agregar / Eliminar</a>
-				</div>
-			</fieldset>
-			<label for="monto">Monto</label>
-			<input type="number" id="nmromonto" name="monto" step="0.01" min="0" max="9999" required="required" placeholder="0.00" />
-			<label for="gasto">Descripción del gasto</label>
-			<div class="item-inner">
-				<div class="item-input">
-					<textarea rows="" cols="" placeholder="Captura una descripción" id="textdsgasto" name="gasto" required="required" maxlength="100" minlength="2"></textarea>
-				</div>
-			</div>
-			<div class="ui-block-b">
-				<input type="submit" value="Guardar Gasto" data-theme="b" form="formguardargasto"/>
+	<section id="pagecreargasto" class="section">
+		<form class="box">
+	   		<div class="columns">
+		   		<div class="column">
+			 		<div class="select">
+						<select id="selecategorias">
+							<option selected="selected">Seleccione...</option>
+						</select>
+					</div>
+		   		</div>
+	   			<div class="column">
+					<a href="#" id="btoncategoria" class="button is-warning">
+						Agregar/Eliminar
+					</a>
+	   			</div>
 			</div>
 		</form>
+		<form id="formguardargasto" class="box">
+			<input class="button" style="width: 100%" type="number" id="nmromonto" name="monto" step="0.01" min="0" max="9999" required="required" placeholder="0.00" />
+			<div class="item-inner">
+				<div class="item-input">
+					<textarea class="textarea" rows="10" cols="" placeholder="Captura una descripciÃ³n" id="textdsgasto" name="gasto" required="required" maxlength="100" minlength="2"></textarea>
+				</div>
+			</div>
+			<input class="button is-success" type="submit" value="Guardar Gasto" data-theme="b" form="formguardargasto"/>
+		</form>	
 	</section>
-	<!-- 		Pie de página -->
-	<footer th:replace="fragments/footer :: footer"> </footer>
-	<script type="module" src="/public/creargasto.js"></script>
-</div>
+	<!--		Sripts -->				
+	<div th:replace="/cdn/script :: script"></div>
+	<script type="module" src="/public/creargasto.js" ></script>
+</body>
 </html>

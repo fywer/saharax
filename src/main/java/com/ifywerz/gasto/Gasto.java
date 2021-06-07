@@ -1,5 +1,6 @@
 package com.ifywerz.gasto;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 
 import javax.persistence.Column;
@@ -11,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -32,10 +34,11 @@ public class Gasto {
     @NotNull
     @Size(min = 2, max = 100)
     private String dsGasto;
-    
+
     @Column(name = "MONTO")
     @NotNull
-    private Double monto;
+    @Digits(integer=10, fraction=6)
+	private BigDecimal monto;
     
     @Column(name = "ULTIMA_ACTUALIZACION", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
@@ -63,11 +66,11 @@ public class Gasto {
 		this.dsGasto = dsGasto;
 	}
 
-	public Double getMonto() {
+	public BigDecimal getMonto() {
 		return monto;
 	}
 
-	public void setMonto(Double monto) {
+	public void setMonto(BigDecimal monto) {
 		this.monto = monto;
 	}
 

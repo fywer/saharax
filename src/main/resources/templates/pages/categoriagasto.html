@@ -1,23 +1,36 @@
 <!DOCTYPE html>
 <html lang="es-MX" xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="categoriagasto" data-role="page" id="categoriagasto">
+<head th:replace="/cdn/head :: head"></head>
+<body>
 	<!-- 		Encabezado -->
-	<header data-role="header" data-position="fixed" style="background: #173647;">
-		<a href="#creargasto" id="btoncreargasto" data-role="button" data-iconpos="notext" data-icon="back" style="background: #173647;"></a>
-		<h1>
-			<img width="25%" height="25%" src="/public/img/header.svg" />
-		</h1>
-	</header>
-	<!-- 		Contenido principal -->
-	<section data-role="content">
-		<form id="formagregarcategoria" data-ajax="false">
-			<label for="categoria">Agregar categor�a</label>
-			<input type="text" id="textcategoria" placeholder="Captura la categor�a" required="required" maxlength="100" minlength="2" />
-			<input type="submit" value="Agregar" data-theme="b" form="formagregarcategoria" />
+	<header th:replace="/fragments/header :: header"></header>
+	<section id="categoriagasto" class="section">
+		<label for="textcategoria">Agregar Categoría</label>
+		<form class="box" id="formagregarcategoria" >
+			<div class="field">
+				<div class="control">
+					<input class="input is-primary" type="text" id="textcategoria" placeholder="Captura la categoría" required="required" maxlength="100" minlength="2" />
+				</div>
+			</div>
+			<div class="field">
+				<div class="control">
+					<input class="button is-success" type="submit" value="Agregar" form="formagregarcategoria" />
+				</div>
+			</div>
 		</form>
-		<ul data-role="listview" data-icon="delete" data-inset="true" id="listcategorias">
-		</ul>
+		<!--División del Tipo-->
+		<label for="selecategorias">Categorías</label>
+		<form class="box" id="formeliminarcategoria">
+			<div class="field">
+				<div class="control">
+					<ul class="list" id="selecategorias">
+					</ul>
+				</div>
+			</div>
+		</form>
 	</section>
-	<script type="module" src="/public/categoriagasto.js"></script>
-</div>
+	<!--		Sripts -->				
+	<div th:replace="/cdn/script :: script"></div>
+	<script type="module" src="/public/categoriagasto.js" ></script>
+</body>
 </html>

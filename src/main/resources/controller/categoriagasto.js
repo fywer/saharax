@@ -3,54 +3,27 @@ import handler from "./util/handler.js";
 import util from "./util/util.js";
 import { Categoria } from "./modules/categoria.js";
 
-const createItemLink = (categoria) => {
-	let itemLink = document.createElement("a");
-	itemLink.setAttribute('id', categoria.getId);
-	itemLink.appendChild( document.createTextNode(categoria.getDsCategoria) );
-	itemLink.addEventListener("click", (event) => {
-		alertify.confirm("�Esta seguro de eliminar la categor�a?",
-		() => { deleteCategoria(categoria) },
-		() => { return });
-	});
-	return itemLink;
-}
 const deleteCategoria = (categoria) => {
-	const url = "/categoria".concat("/"+categoria.getId);
-	const request = {
-		method : 'DELETE',
-		headers : {
-			'Authorization' : sessionStorage.getItem("token")
+	alertify.confirm('Saharax', "¿Esta seguro de eliminar la categoría?",
+	() => {
+		const url = "/categoria".concat("/"+categoria.getId);
+		const request = {
+			method : 'DELETE',
+			headers : {
+				'Authorization' : sessionStorage.getItem("token")
+			}
 		}
-	}
-	fetch(url, request).
-	then(handler.responseText).
-	then( () => {
-		document.getElementById(categoria.getId).remove();
-		alertify.success("Se ha eliminado la categor�a con exito.");
-	}).
-	catch(handler.error);
-}
-const displayListCategoria = (categoria) => {
-	const listcategorias = document.querySelector("#listcategorias");
-	let itemList = document.createElement("li");
-	let itemLink = createItemLink(categoria);
-	itemList.appendChild(itemLink);
-	listcategorias.appendChild(itemList);
-	$("#listcategorias").listview('refresh');
-	alertify.success("Se ha guardado con exito la categor�a.");
-	document.getElementById('textcategoria').value = "";
-	document.querySelector("[form=formagregarcategoria]").disabled = false;
-}		
-const displayListCategorias = (categorias) => {
-	const listcategorias = document.querySelector("#listcategorias");
-	util.componentCleaner(listcategorias);
-	categorias.forEach( categoria => {
-		let itemList = document.createElement("li");
-		let itemLink = createItemLink(categoria);
-		itemList.appendChild(itemLink);
-		listcategorias.appendChild(itemList);
-	});
-	$("#listcategorias").listview('refresh');
+		fetch(url, request).
+		then(handler.responseText).
+		then( () => {
+			document.getElementById(categoria.getId).remove();
+			alertify.success("Se ha eliminado la categoría con exito.");
+		}).
+		catch(handler.error);	
+	},
+	() => {
+		return	
+	}).set('labels', {ok: 'Eliminar', cancel: 'Cancelar'});
 }
 const saveCategoria = (event) => {
 	document.querySelector("[form=formagregarcategoria]").disabled = true;
@@ -60,8 +33,8 @@ const saveCategoria = (event) => {
 	let dsCategoria = util.stringCleaner(new String(textcategoria));
 	try {
 		if (dsCategoria.length < 2 || dsCategoria.length > 100) {
-			alertify.warning("La categor�a debe tener al menos 2 caracteres y menos de 100.");
-			throw "La categor�a debe tener al menos 2 caracteres y menos de 100.";
+			alertify.warning("La categoría debe tener al menos 2 caracteres y menos de 100.");
+			throw "La categoría debe tener al menos 2 caracteres y menos de 100.";
 		}	
 	} catch (e) {
 		console.warn(e);
@@ -83,9 +56,51 @@ const saveCategoria = (event) => {
 	fetch(url, request).
 	then(handler.responseJson).
 	then(Categoria.parseCategoria).
-	then(displayListCategoria).
+	then(insertCategoria).
 	catch(handler.error).
 	catch( () => document.querySelector("[form=formagregarcategoria]").disabled = false);
+}
+const insertCategoria = (categoria) => {
+	let itemOption = document.createElement("li");
+	itemOption.setAttribute("id", categoria.getId);
+	let itemLink = document.createElement("button");
+	let itemIcon = document.createElement("i");
+	itemIcon.setAttribute("class", "fa fa-trash fa-2x");
+	itemLink.setAttribute("style", "display: flex; justify-content: flex-end;");
+	itemLink.setAttribute("class", "button is-danger");
+	itemLink.appendChild(itemIcon);
+	itemLink.addEventListener('click', (event) => {
+		event.preventDefault();
+		deleteCategoria(categoria);
+	});
+	itemOption.appendChild(document.createTextNode(categoria.getDsCategoria) );
+	const selecategorias = document.querySelector("#selecategorias");
+	selecategorias.appendChild(itemOption);
+	itemOption.appendChild(itemLink);
+	alertify.success("Se ha guardado con exito la categoría.");
+	document.getElementById('textcategoria').value = "";
+	document.querySelector("[form=formagregarcategoria]").disabled = false;
+}		
+const displayCategorias = (categorias) => {
+	const selecategorias = document.querySelector("#selecategorias");
+	util.componentCleaner(selecategorias);
+	categorias.forEach( categoria => {
+		let itemOption = document.createElement("li");
+		itemOption.setAttribute("id", categoria.getId);
+		let itemLink = document.createElement("button");
+		let itemIcon = document.createElement("i");
+		itemIcon.setAttribute("class", "fa fa-trash fa-2x");
+		itemLink.setAttribute("style", "display: flex; justify-content: flex-end;");
+		itemLink.setAttribute("class", "button is-danger");
+		itemLink.addEventListener('click', (event) => {
+			event.preventDefault();
+			deleteCategoria(categoria);
+		});
+		itemLink.appendChild(itemIcon);
+		itemOption.appendChild(document.createTextNode(categoria.getDsCategoria) );
+		itemOption.appendChild(itemLink);
+		selecategorias.appendChild(itemOption);
+	});
 }
 const getCategorias = () => {
 	const url = '/categoria';
@@ -99,10 +114,10 @@ const getCategorias = () => {
 	fetch(url, request).
 	then(handler.responseJson).
 	then(Categoria.parseCategorias).
-	then(displayListCategorias).
+	then(displayCategorias).
 	catch(handler.error);
 }
-$(document).on("pageshow", "#categoriagasto", (data) => {
+window.addEventListener("load", event => {
 	getCategorias();
 	const formagregarcategoria = document.getElementById('formagregarcategoria');
 	formagregarcategoria.addEventListener("submit", saveCategoria);

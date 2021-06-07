@@ -65,12 +65,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         HttpMethod.GET,
                         "/",
-                        "/home",
+                        "/home/**",
                         "/refresh",
                         "/**/*.css",
-                        "/**/*.svg",
-                        "/**/*.gif",
-                        "/**/*.map",
+                        "/**/*.ico",
                         "/**/*.js"
                 ).permitAll()
                 .antMatchers("/auth/**").permitAll()

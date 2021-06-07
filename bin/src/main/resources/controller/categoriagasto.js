@@ -8,7 +8,7 @@ const createItemLink = (categoria) => {
 	itemLink.setAttribute('id', categoria.getId);
 	itemLink.appendChild( document.createTextNode(categoria.getDsCategoria) );
 	itemLink.addEventListener("click", (event) => {
-		alertify.confirm("¿Esta seguro de eliminar la categoría?",
+		alertify.confirm("ï¿½Esta seguro de eliminar la categorï¿½a?",
 		() => { deleteCategoria(categoria) },
 		() => { return });
 	});
@@ -26,7 +26,7 @@ const deleteCategoria = (categoria) => {
 	then(handler.responseText).
 	then( () => {
 		document.getElementById(categoria.getId).remove();
-		alertify.success("Se ha eliminado la categoría con exito.");
+		alertify.success("Se ha eliminado la categorï¿½a con exito.");
 	}).
 	catch(handler.error);
 }
@@ -37,15 +37,13 @@ const displayListCategoria = (categoria) => {
 	itemList.appendChild(itemLink);
 	listcategorias.appendChild(itemList);
 	$("#listcategorias").listview('refresh');
-	alertify.success("Se ha guardado con exito la categoría.");
+	alertify.success("Se ha guardado con exito la categorï¿½a.");
 	document.getElementById('textcategoria').value = "";
 	document.querySelector("[form=formagregarcategoria]").disabled = false;
 }		
 const displayListCategorias = (categorias) => {
 	const listcategorias = document.querySelector("#listcategorias");
-	while (listcategorias.firstChild){
- 		listcategorias.removeChild(listcategorias.firstChild);
-	};
+	util.componentCleaner(listcategorias);
 	categorias.forEach( categoria => {
 		let itemList = document.createElement("li");
 		let itemLink = createItemLink(categoria);
@@ -62,8 +60,8 @@ const saveCategoria = (event) => {
 	let dsCategoria = util.stringCleaner(new String(textcategoria));
 	try {
 		if (dsCategoria.length < 2 || dsCategoria.length > 100) {
-			alertify.warning("La categoría debe tener al menos 2 caracteres y menos de 100.");
-			throw "La categoría debe tener al menos 2 caracteres y menos de 100.";
+			alertify.warning("La categorï¿½a debe tener al menos 2 caracteres y menos de 100.");
+			throw "La categorï¿½a debe tener al menos 2 caracteres y menos de 100.";
 		}	
 	} catch (e) {
 		console.warn(e);

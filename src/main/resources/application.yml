@@ -15,7 +15,7 @@ spring:
     ## MYSQL
     url: jdbc:mysql://localhost/saharax
     username: ifywerz
-    password: company
+    password: 98712345i
     driver-class-name: com.mysql.jdbc.Driver
     
   #h2:

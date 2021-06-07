@@ -5,9 +5,7 @@ import { Categoria } from "./modules/categoria.js";
 
 const displayCategorias = (categorias) => {
 	const selecategorias = document.querySelector("#formguardargasto #selecategorias");
-	while (selecategorias.firstChild){
- 		selecategorias.removeChild(selecategorias.firstChild);
-	};
+	util.componentCleaner(selecategorias);
 	categorias.forEach( categoria => {
 		let itemOpcion = document.createElement("option");
 		itemOpcion.setAttribute('value', categoria.getId);
@@ -42,8 +40,8 @@ const saveGasto = (event) => {
 	let dsGasto = util.stringCleaner(new String(textdsgasto));
 	try{
 		if (dsGasto.length < 2 || dsGasto.length > 100) {
-			alertify.warning("La descripción debe tener al menos 2 caracteres y menos de 100.");
-			throw "La descripción debe tener al menos 2 caracteres y menos de 100.";
+			alertify.warning("La descripciï¿½n debe tener al menos 2 caracteres y menos de 100.");
+			throw "La descripciï¿½n debe tener al menos 2 caracteres y menos de 100.";
 		}	
 	} catch (e) {
 		console.warn(e);

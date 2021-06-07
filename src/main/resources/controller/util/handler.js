@@ -20,7 +20,7 @@ const responseText = (response) => {
 	else if (response.status == 401) {
 		sessionStorage.removeItem('token');
 		return new Promise( (resolve, reject) => {
-			reject("La session del usuario ha sido expidada. Por favor, inicie sessión.");
+			reject("La session del usuario ha sido expidada. Por favor, inicie sessiï¿½n.");
 		});
 	}
 	else if (response.status == 429) {
@@ -44,7 +44,7 @@ const responseJson = (response) => {
 	}
 	else if (response.status == 401) {
 		return new Promise( (resolve, reject) => {
-			reject("El usuario no ha sido autorizado.");
+			reject("El usuario no ha sido autenticado.");
 		});
 	} else if (response.status == 429) {
 		return new Promise( (resolve, reject) => {
