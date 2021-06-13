@@ -4,7 +4,7 @@ import util from "./util/util.js";
 import { Categoria } from "./modules/categoria.js";
 
 const displayCategorias = (categorias) => {
-	const selecategorias = document.querySelector("#formguardargasto #selecategorias");
+	const selecategorias = document.querySelector("#selecategorias");
 	util.componentCleaner(selecategorias);
 	categorias.forEach( categoria => {
 		let itemOpcion = document.createElement("option");
@@ -33,13 +33,13 @@ const saveGasto = (event) => {
 	document.querySelector("[form=formguardargasto]").disabled = true;
 	const url = '/gasto';
 	event.preventDefault();
-	let idCategoria = parseInt(document.querySelector("#formguardargasto #selecategorias").value, 10);
-	let monto = parseFloat(document.querySelector("#formguardargasto #nmromonto").value);
-	let textdsgasto = document.querySelector("#formguardargasto #textdsgasto").value;
+	let idCategoria = parseInt(document.querySelector("#selecategorias").value, 10);
+	let monto = parseFloat(document.querySelector("#nmromonto").value);
+	let textdsgasto = document.querySelector("#textdsgasto").value;
 	let dsGasto = util.stringCleaner(new String(textdsgasto));
 	try{
 		if (dsGasto.length < 2 || dsGasto.length > 100) {
-			alertify.warning("La descripci�n debe tener al menos 2 caracteres y menos de 100.");
+			alertify.warning("La descripción debe tener al menos 2 caracteres y menos de 100.");
 			throw "La descripción debe tener al menos 2 caracteres y menos de 100.";
 		}	
 	} catch (e) {

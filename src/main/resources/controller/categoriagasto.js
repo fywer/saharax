@@ -65,7 +65,7 @@ const insertCategoria = (categoria) => {
 	itemOption.setAttribute("id", categoria.getId);
 	let itemLink = document.createElement("button");
 	let itemIcon = document.createElement("i");
-	itemIcon.setAttribute("class", "fa fa-trash fa-2x");
+	itemIcon.setAttribute("class", "fa fa-trash");
 	itemLink.setAttribute("style", "display: flex; justify-content: flex-end;");
 	itemLink.setAttribute("class", "button is-danger");
 	itemLink.appendChild(itemIcon);

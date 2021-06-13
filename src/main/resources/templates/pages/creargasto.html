@@ -4,31 +4,46 @@
 <body>
 	<!-- 		Encabezado -->
 	<header th:replace="/fragments/header :: header"></header>
-	<section id="pagecreargasto" class="section">
+	<section id="creargasto" class="section">
+		<label for="nmromonto"><b>Seleccionar Categoría</b></label>
 		<form class="box">
-	   		<div class="columns">
-		   		<div class="column">
-			 		<div class="select">
-						<select id="selecategorias">
-							<option selected="selected">Seleccione...</option>
-						</select>
-					</div>
-		   		</div>
-	   			<div class="column">
-					<a href="#" id="btoncategoria" class="button is-warning">
-						Agregar/Eliminar
-					</a>
-	   			</div>
-			</div>
-		</form>
-		<form id="formguardargasto" class="box">
-			<input class="button" style="width: 100%" type="number" id="nmromonto" name="monto" step="0.01" min="0" max="9999" required="required" placeholder="0.00" />
-			<div class="item-inner">
-				<div class="item-input">
-					<textarea class="textarea" rows="10" cols="" placeholder="Captura una descripción" id="textdsgasto" name="gasto" required="required" maxlength="100" minlength="2"></textarea>
+			<div class="field">
+				<div class="select">
+					<select id="selecategorias">
+						<option selected="selected">Seleccione...</option>
+					</select>
 				</div>
 			</div>
-			<input class="button is-success" type="submit" value="Guardar Gasto" data-theme="b" form="formguardargasto"/>
+			<div class="field">
+				<p class="control">
+					<a id="btoncategoria" class="button is-primary">
+						<i class="fa fa-plus-square"></i>
+					</a>						
+				</p>
+			</div>
+		</form>
+		<label for="nmromonto"><b>Regitrar Gasto</b></label>
+		<form id="formguardargasto" class="box">
+			<div class="field">
+				<p class="control has-icons-left">
+					<input class="button" style="width: 100%" type="number" id="nmromonto" name="monto" step="0.01" min="0" max="9999" required="required" placeholder="0.00" />
+					<span class="icon is-left">
+	    			<i class="fa fa-money"></i>
+  				</span>
+				</p>
+			</div>
+			<div class="field">
+				<div class="item-inner">
+					<div class="item-input">
+						<textarea class="textarea" rows="10" cols="" placeholder="Captura una descripción" id="textdsgasto" name="gasto" required="required" maxlength="100" minlength="2"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<p class="control">
+					<input class="button is-success" type="submit" value="Guardar Gasto" data-theme="b" form="formguardargasto"/>
+				</p>
+			</div>
 		</form>	
 	</section>
 	<!--		Sripts -->				
