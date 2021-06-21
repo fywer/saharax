@@ -63,17 +63,12 @@ const saveCategoria = (event) => {
 const insertCategoria = (categoria) => {
 	let itemOption = document.createElement("li");
 	itemOption.setAttribute("id", categoria.getId);
-	let itemLink = document.createElement("button");
-	let itemIcon = document.createElement("i");
-	itemIcon.setAttribute("class", "fa fa-trash");
-	itemLink.setAttribute("style", "display: flex; justify-content: flex-end;");
-	itemLink.setAttribute("class", "button is-danger");
-	itemLink.appendChild(itemIcon);
+	let itemLink = document.createElement("a");
 	itemLink.addEventListener('click', (event) => {
 		event.preventDefault();
 		deleteCategoria(categoria);
 	});
-	itemOption.appendChild(document.createTextNode(categoria.getDsCategoria) );
+	itemLink.appendChild(document.createTextNode(categoria.getDsCategoria) );
 	const selecategorias = document.querySelector("#selecategorias");
 	selecategorias.appendChild(itemOption);
 	itemOption.appendChild(itemLink);
@@ -87,17 +82,12 @@ const displayCategorias = (categorias) => {
 	categorias.forEach( categoria => {
 		let itemOption = document.createElement("li");
 		itemOption.setAttribute("id", categoria.getId);
-		let itemLink = document.createElement("button");
-		let itemIcon = document.createElement("i");
-		itemIcon.setAttribute("class", "fa fa-trash fa-2x");
-		itemLink.setAttribute("style", "display: flex; justify-content: flex-end;");
-		itemLink.setAttribute("class", "button is-danger");
+		let itemLink = document.createElement("a");
 		itemLink.addEventListener('click', (event) => {
 			event.preventDefault();
 			deleteCategoria(categoria);
 		});
-		itemLink.appendChild(itemIcon);
-		itemOption.appendChild(document.createTextNode(categoria.getDsCategoria) );
+		itemLink.appendChild(document.createTextNode(categoria.getDsCategoria) );
 		itemOption.appendChild(itemLink);
 		selecategorias.appendChild(itemOption);
 	});

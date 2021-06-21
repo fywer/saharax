@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang='es-MX' xmlns:th='http://www.thymeleaf.org'>
 <header th:fragment="header">
-	<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+	<nav class="navbar is-dark" role="navigation" aria-label="dropdown navigation">
 		<div class="navbar-brand">
 			<a class="navbar-item" href="/home">
 				<img src="https://bulma.io/images/bulma-logo-white.png" alt="Administrador de gastos" width="112" height="28" />
 			</a>
-			<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="true">
+			<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false ">
 				<span aria-hidden="true"></span>
 				<span aria-hidden="true"></span>
 				<span aria-hidden="true"></span>
@@ -19,8 +19,8 @@
 				<div class="navbar-item has-dropdown is-hoverable">
 					<a class="navbar-link"> Comprobante </a>
 					<div class="navbar-dropdown">
-						<a class="navbar-item"> Gastos </a>
-						<a id="creargasto" class="navbar-item"> Anotar Gasto </a>
+						<a class="navbar-item" href="/home/gastos"> Gastos </a>
+						<a class="navbar-item" href="/home/creargasto" id="creargasto"> Anotar Gasto </a>
 					</div>
 				</div>
 			</div>

@@ -13,6 +13,7 @@ public class PageController {
 	public static final String HOME = "home";
 	public static final String CREAR_GASTO = HOME+"/creargasto";
 	public static final String CATEGORIA_GASTO = HOME+"/categoriagasto";
+	public static final String LEER_GASTOS = HOME+"/gastos";
 	
 	public PageController() {
 		// TODO Auto-generated constructor stub
@@ -37,7 +38,9 @@ public class PageController {
     public ModelAndView categoriaGasto() {
     	return new ModelAndView("pages/categoriagasto");
     }
-
     
+    @GetMapping(LEER_GASTOS)
+    public ModelAndView leerGastos() {
+    	return new ModelAndView("pages/leergastos");
+    }
 }
-

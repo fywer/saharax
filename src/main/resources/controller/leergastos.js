@@ -4,7 +4,7 @@ import util from "./util/util.js";
 import { Gasto } from "./modules/gasto.js";
 
 const displayCategorias = (categorias) => {
-	const selecategorias = document.querySelector("#formactualizargasto #selecategorias");
+	const selecategorias = document.querySelector("#selecategorias");
 	categorias.forEach( categoria => {
 		let itemOption = document.createElement("option");		
 		itemOption.setAttribute('value', categoria.id);
@@ -56,7 +56,6 @@ const createItemList = (gasto) => {
 	itemParagraphDs.appendChild(document.createTextNode(gasto.getDsGasto));
 	itemLink.appendChild(itemParagraphDs);
 	let itemParagraphMonto = document.createElement("p");
-	itemParagraphMonto.setAttribute('class', "ui-li-aside");
 	let itemStrong = document.createElement("strong");
 	itemStrong.appendChild(document.createTextNode(gasto.getMontoFomat));
 	itemParagraphMonto.appendChild(itemStrong);
@@ -80,18 +79,18 @@ const createItemList = (gasto) => {
 }
 const createItemListDivider = (diadelgasto, sumatoriapordia) => {
 	let itemList = document.createElement("li");
-	itemList.setAttribute('data-role', "list-divider");
+	itemList.setAttribute('class', "list");
 	itemList.setAttribute('style', "background: #099268; color: #FFF; text-shadow: none;");
 	itemList.appendChild(document.createTextNode(diadelgasto));
 	let itemspansumapordia = document.createElement("span");
-	itemspansumapordia.setAttribute('class', 'ui-li-count');
+	itemspansumapordia.setAttribute('style', "position: absolute;right: 4em;background: red; color: #f6f6f6; border-radius: .5em;padding: .2em; font-weight: bold; font-size: .7em;");
 	itemspansumapordia.appendChild(document.createTextNode("$" + sumatoriapordia.toFixed(2)));
 	itemList.appendChild(itemspansumapordia);
 	return itemList;
 }
 const createItemListView  = (gastospormes) => {
 	let itemListView = document.createElement("ul");
-	itemListView.setAttribute('data-role', 'listview');	
+	itemListView.setAttribute('class', 'list');	
 	let dia = gastospormes[0].getDia;
 	let sumatoriapordia = 0;
 	let itemsListOfGasto = [];
@@ -136,13 +135,10 @@ const displayGastos = (data) => {
 		let agrupado = false;
 		if(gastospordia.length > 0) {
 			let itemCollapsible = document.createElement("div");
-			itemCollapsible.setAttribute('data-role',"collapsible");
+			itemCollapsible.setAttribute('class',"control");
 			if (agrupado == false) {
-				let itemParagraphDia = document.createElement("h2");
 				let gastotemp = gastospordia[indicedia];
 				let diadelgasto = `${gastotemp.getDia} de ${gastotemp.getMesFormat}`
-				itemParagraphDia.appendChild(document.createTextNode(diadelgasto));
-				itemCollapsible.appendChild(itemParagraphDia);
 				agrupado = true;
 				indicedia += 1;
 			}
@@ -151,7 +147,6 @@ const displayGastos = (data) => {
 			setgastos.appendChild(itemCollapsible);
 		}
 	});
-	$("#setgastos").collapsibleset().trigger("create")
 } 
 const getGastos = (anio, mes) => {
 	const url = "/gasto/year/".concat(anio)+"?mes=".concat(mes)
@@ -174,8 +169,8 @@ const updateGasto = (event) => {
 	document.querySelector("[form=formactualizargasto]").disabled = true;
 	const url = '/gasto';
 	event.preventDefault();
-	let idGasto = parseInt(document.querySelector("#formactualizargasto #btonidgasto").value, 10 ); 
-	let idCategoria = parseInt( document.querySelector("#formactualizargasto #selecategorias").value, 10 );
+	let idGasto = parseInt(document.querySelector("#btonidgasto").value, 10 ); 
+	let idCategoria = parseInt( document.querySelector("#selecategorias").value, 10 );
 	let ultimaActualizacion = document.querySelector("#formactualizargasto #btonfechagasto").value;
 	let monto = parseFloat(document.querySelector("#formactualizargasto #nmromonto").value);
 	let textdsgasto = document.querySelector("#formactualizargasto #textdsgasto").value;
@@ -284,7 +279,6 @@ const displayYears = (anios) => {
 		}
 		indice += 1;
 	} while(indice < anios.length);
-	$("#formbuscargasto #seleanios").selectmenu("refresh");
 	return new Promise( resolve => {
 		resolve(document.querySelector("#formbuscargasto #selemeses"));
 	});
@@ -310,7 +304,6 @@ const displayMeses = (meses) => {
 		}
 		indice += 1;
 	} while(indice < meses.length);
-	$("#formbuscargasto #selemeses").selectmenu("refresh");
 }
 
 const getUltimateYears = () => {
@@ -332,7 +325,6 @@ const getUltimateYears = () => {
 		itemOption.setAttribute('value', 0);
 		itemOption.appendChild(document.createTextNode("Seleccionar"));
 		selemeses.appendChild(itemOption);
-		$("#formbuscargasto #selemeses").selectmenu("refresh");
 	}). 
 	catch(handler.error);
 }
@@ -351,8 +343,30 @@ const getMonths = (anio) => {
 	then(displayMeses).
 	catch(handler.error);
 }
-$(document).on("pageshow", "#leergastos", (data) => {
-	util.componentCleaner(document.querySelector("#setgastos"));
+//$(document).on("pageshow", "#leergastos", (data) => {
+//	util.componentCleaner(document.querySelector("#setgastos"));
+//	const seleanios = document.querySelector("#formbuscargasto #seleanios");
+//	const selemeses = document.querySelector("#formbuscargasto #selemeses");
+//	getUltimateYears();
+//	seleanios.addEventListener("change", () => {
+//		if (seleanios.value == 0) {
+//			alertify.warning("Por favor, selecciona un año.");
+//			return;	
+//		} else getMonths(seleanios.value);	
+//	});
+//	selemeses.addEventListener("change", () => {
+//		if (selemeses.value == 0) {
+//			alertify.warning("Por favor, selecciona un mes.");
+//			return
+//		} else if (seleanios.value == 0) {
+//			alertify.warning("Por favor, selecciona un año.");
+//			return;
+//		} else getGastos(seleanios.value, selemeses.value);
+//	});
+//});
+
+
+window.addEventListener("load", event => {
 	const seleanios = document.querySelector("#formbuscargasto #seleanios");
 	const selemeses = document.querySelector("#formbuscargasto #selemeses");
 	getUltimateYears();
@@ -371,12 +385,10 @@ $(document).on("pageshow", "#leergastos", (data) => {
 			return;
 		} else getGastos(seleanios.value, selemeses.value);
 	});
-});
 
-$(document).on("pageshow", "#gasto", (data) => {
-	$("#formactualizargasto #selecategorias").selectmenu("refresh");
-	const formactualizargasto = document.getElementById("formactualizargasto");
-	formactualizargasto.addEventListener("submit", updateGasto);
-	const btoneliminargasto = document.getElementById("btoneliminargasto");
-	btoneliminargasto.addEventListener("click", deleteGasto);
+	//$("#formactualizargasto #selecategorias").selectmenu("refresh");
+//	const formactualizargasto = document.getElementById("formactualizargasto");
+//	formactualizargasto.addEventListener("submit", updateGasto);
+//	const btoneliminargasto = document.getElementById("btoneliminargasto");
+//	btoneliminargasto.addEventListener("click", deleteGasto);
 });

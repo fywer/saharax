@@ -1,0 +1,25 @@
+li {
+	padding: .7em;        	
+	border-style: solid;
+	background-color: #f6f6f6;
+	border-color: #f6f6ff;
+	text-shadow: 0 1px 0 #f3f3f3;
+	color: #333;
+	border-width: 0em .05em .05em .05em;
+}
+li:first-child {
+	border-radius: .5em .5em 0em 0em;
+	border-width: 0em 0em 0em 0em;
+}
+li:last-child {
+	border-radius: 0em 0em .5em .5em;
+}
+a {
+	transition: color .5s;
+	text-decoration: none;
+	color: #333;
+}
+a:hover {
+	color: orange;
+	border-color:  orange;
+}	

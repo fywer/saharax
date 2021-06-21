@@ -1,27 +1,35 @@
 <!DOCTYPE html>
 <html lang="es-MX" xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="leergastos" data-role="page" id="leergastos">
+<head th:replace="/cdn/head :: head"></head>
+<body>
 	<!-- 		Encabezado -->
-	<header th:replace="/fragments/header"></header>
+	<header th:replace="/fragments/header :: header"></header>
 	<!-- 		Contenido principal -->
-	<section data-role="content">
-		<form id="formbuscargasto">
-			<fieldset class="ui-grid-a">
-				<div class="ui-block-a">
-					<select id="seleanios">
-					</select>
-				</div>
-				<div class="ui-block-b">
-					<select id="selemeses">
-					</select>
-				</div>
-			</fieldset>
+	<section id="leergastos" class="section">
+		<label for="seleanios"><b>BÃºsqueda de gastos</b></label>
+		<form id="formbuscargasto" class="box">
+			<div class="field has-addons has-addons-centered">
+				<fieldset class="control">
+					<div class="select">
+						<select id="seleanios">
+						</select>
+					</div>
+					<div class="select">
+						<select id="selemeses">
+						</select>
+					</div>
+				</fieldset>
+			</div>
 		</form>
-		<div data-role="collapsibleset" id="setgastos">	
-		</div>
+		<label for=""><b>Gastos</b></label>
+		<form class="box" >
+			<div class="field" id="setgastos">
+				
+			</div>	
+		</form>
 	</section>
-	<!-- 		Pie de página -->
-	<footer th:replace="/fragments/footer"> </footer>
+	<!--		Sripts -->				
+	<div th:replace="/cdn/script :: script"></div>
 	<script type="module" src="/public/leergastos.js"></script>	
-</div>
+</body>
 </html>
