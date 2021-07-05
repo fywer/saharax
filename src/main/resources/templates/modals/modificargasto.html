@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es-MX" xmlns:th="http://www.thymeleaf.org">
+	<div class="modal" th:fragment="modificargasto" id="modalmodificargasto">
+		<div class="modal-background"></div>
+		<div class="modal-card">
+			<header class="modal-card-head">
+<!--				<p class="modal-card-title">Editar Gasto</p> -->
+			</header>
+			<section class="modal-card-body">
+				<label for="nmromonto"><b>Seleccionar Categoría</b></label>
+				<form class="box">
+					<div class="field">
+						<div class="select">
+							<select id="selecategorias">
+								<option selected="selected">Seleccione...</option>
+							</select>
+						</div>
+					</div>
+					<div class="field">
+						<p class="control">
+							<input type="hidden" id="btonidgasto" />
+						</p>
+					</div>
+					<div class="field">
+						<p class="control">
+							<input class="input" type="date" id="btonfechagasto" />
+						</p>
+					</div>
+				</form>
+				<label for="nmromonto"><b>Modificar Gasto</b></label>
+				<form class="box">
+					<div class="field">
+						<p class="control has-icons-left">
+							<input class="button" style="width: 100%" type="number" id="nmromonto" name="monto" step="0.01" min="0" max="9999" required="required" placeholder="0.00" />
+							<span class="icon is-left">
+			    				<i class="fa fa-money"></i>
+		  					</span>
+						</p>
+					</div>
+					<div class="field">
+						<div class="item-inner">
+							<div class="item-input">
+								<textarea class="textarea" rows="2" cols="" placeholder="Captura una descripción" id="textdsgasto" name="gasto" required="required" maxlength="100" minlength="2"></textarea>
+							</div>
+						</div>
+					</div>
+				</form>	
+			</section>
+			
+			<footer class="modal-card-foot">
+				<button class="button is-success" id="btonactualizargasto">Guardar Cambios</button>
+				<button class="button is-danger" id="btoneliminargasto">Borrar</button>
+			</footer>			
+		</div>
+	
+	</div>
+</html>

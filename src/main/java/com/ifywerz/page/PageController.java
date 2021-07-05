@@ -1,4 +1,4 @@
-package com.ifywerz.page;
+	package com.ifywerz.page;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

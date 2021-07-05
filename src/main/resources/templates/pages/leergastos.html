@@ -6,7 +6,7 @@
 	<header th:replace="/fragments/header :: header"></header>
 	<!-- 		Contenido principal -->
 	<section id="leergastos" class="section">
-		<label for="seleanios"><b>Búsqueda de gastos</b></label>
+		<label class="etiqueta" for="seleanios"><b>Búsqueda de gastos</b></label>
 		<form id="formbuscargasto" class="box">
 			<div class="field has-addons has-addons-centered">
 				<fieldset class="control">
@@ -21,13 +21,17 @@
 				</fieldset>
 			</div>
 		</form>
-		<label for=""><b>Gastos</b></label>
+		<label class="control" for="setgastos"><b>Gastos</b></label>
 		<form class="box" >
 			<div class="field" id="setgastos">
-				
 			</div>	
 		</form>
 	</section>
+	<!-- 		Dialogo modificar gasto -->
+	<div th:replace="/modals/modificargasto :: modificargasto">
+		
+	</div>
+	
 	<!--		Sripts -->				
 	<div th:replace="/cdn/script :: script"></div>
 	<script type="module" src="/public/leergastos.js"></script>	

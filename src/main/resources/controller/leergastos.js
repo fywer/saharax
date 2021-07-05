@@ -14,7 +14,7 @@ const displayCategorias = (categorias) => {
 	return new Promise( resolve => {
 		resolve(selecategorias);
 	});
-} 		
+}
 const displayGasto = (gasto) => {
 	const url = '/categoria';
 	const request = {
@@ -33,16 +33,11 @@ const displayGasto = (gasto) => {
 			if (selecategorias[i].text === gasto.getCategoria.getDsCategoria) {
 				selecategorias[i].selected = true;
 			}
-		}	
-		document.querySelector("#formactualizargasto #btonidgasto").value = gasto.getId;
-		document.querySelector("#formactualizargasto #btonfechagasto").value = gasto.getUltimaActualizacion;
-		document.querySelector("#formactualizargasto #nmromonto").value = gasto.getMonto.toFixed(2);
-		document.querySelector("#formactualizargasto #textdsgasto").value = gasto.getDsGasto;
-		$.mobile.changePage( "#gasto", {
-			role : 'page',
-			domCache: false
-		});
-	}).
+		}
+		document.querySelector("#btonidgasto").value = gasto.getId;
+		document.querySelector("#btonfechagasto").value = gasto.getUltimaActualizacion;
+		document.querySelector("#nmromonto").value = gasto.getMonto.toFixed(2);
+		document.querySelector("#textdsgasto").value = gasto.getDsGasto;}).
 	catch(handler.error);
 }
 const createItemList = (gasto) => {
@@ -61,6 +56,12 @@ const createItemList = (gasto) => {
 	itemParagraphMonto.appendChild(itemStrong);
 	itemLink.appendChild(itemParagraphMonto);
 	itemLink.addEventListener("click", () => {
+		document.querySelector("#modalmodificargasto").className = "modal is-active"; 
+		const btonactualizargasto = document.getElementById("btonactualizargasto");
+		btonactualizargasto.addEventListener("click", updateGasto);
+		const btoneliminargasto = document.getElementById("btoneliminargasto");
+		btoneliminargasto.addEventListener("click", deleteGasto);
+		
 		const url = "/gasto".concat("/"+gasto.getId);
 		const request = {
 			method : 'GET',
@@ -133,7 +134,7 @@ const displayGastos = (data) => {
 	data.forEach(gastospordia => {
 		let indicedia = 0;
 		let agrupado = false;
-		if(gastospordia.length > 0) {
+		if (gastospordia.length > 0) {
 			let itemCollapsible = document.createElement("div");
 			itemCollapsible.setAttribute('class',"control");
 			if (agrupado == false) {
@@ -142,6 +143,7 @@ const displayGastos = (data) => {
 				agrupado = true;
 				indicedia += 1;
 			}
+
 			let itemListView = createItemListView(gastospordia);	
 			itemCollapsible.appendChild(itemListView);
 			setgastos.appendChild(itemCollapsible);
@@ -166,14 +168,15 @@ const getGastos = (anio, mes) => {
 	catch(handler.error);
 }
 const updateGasto = (event) => {
-	document.querySelector("[form=formactualizargasto]").disabled = true;
-	const url = '/gasto';
 	event.preventDefault();
+	document.querySelector("#btoneliminargasto").disabled = true;
+	document.querySelector("#btonactualizargasto").disabled = true;
+	const url = '/gasto';
 	let idGasto = parseInt(document.querySelector("#btonidgasto").value, 10 ); 
 	let idCategoria = parseInt( document.querySelector("#selecategorias").value, 10 );
-	let ultimaActualizacion = document.querySelector("#formactualizargasto #btonfechagasto").value;
-	let monto = parseFloat(document.querySelector("#formactualizargasto #nmromonto").value);
-	let textdsgasto = document.querySelector("#formactualizargasto #textdsgasto").value;
+	let ultimaActualizacion = document.querySelector("#btonfechagasto").value;
+	let monto = parseFloat(document.querySelector("#nmromonto").value);
+	let textdsgasto = document.querySelector("#textdsgasto").value;
 	let dsGasto = util.stringCleaner(new String(textdsgasto));
 	try{
 		if (dsGasto.length < 2 || dsGasto.length > 100) {
@@ -182,7 +185,7 @@ const updateGasto = (event) => {
 		}	
 	} catch (e) {
 		console.warn(e);
-		document.querySelector("[form=formactualizargasto]").disabled = false;
+		document.querySelector("#btonactualizargasto").disabled = false;
 		return;
 	}
 	const payload = {
@@ -206,18 +209,16 @@ const updateGasto = (event) => {
 	fetch(url, request).
 	then(handler.responseJson).
 	then( data => {
-		alertify.success("Se ha actualizado con exito el gasto.");
-		document.querySelector("[form=formactualizargasto]").disabled = false;
-		$.mobile.changePage( "#leergastos", {
-			role : 'page'
+		alertify.success("Se ha actualizado con exito el gasto.", 2, () => {
+			window.location.replace('/home/gastos');	
 		});
 	}).
 	catch(handler.error)
 }
 const deleteGasto = (event) => {
 	event.preventDefault();
-	document.querySelector("[id=btoneliminargasto]").disabled = true;
-	document.querySelector("[form=formactualizargasto]").disabled = true;
+	document.querySelector("#btoneliminargasto").disabled = true;
+	document.querySelector("#btonactualizargasto").disabled = true;
 	alertify.confirm("¿Esta seguro de eliminar el gasto?",
 	() => { 
 		const idGasto = document.getElementById("btonidgasto").value;
@@ -244,17 +245,15 @@ const deleteGasto = (event) => {
 				gastospormes = [];
 			});
 			localStorage.setItem('gastos', JSON.stringify(datatemp));
-			document.querySelector("[id=btoneliminargasto]").disabled = false;					
-			document.querySelector("[form=formactualizargasto]").disabled = false;
-			$.mobile.changePage( "#leergastos", {
-				role : 'page'
+			alertify.success("Se ha eliminado con exito el gasto.", 2, () => {
+				window.location.replace('/home/gastos');
 			});
 		}).
 		catch(handler.error);
 	},
 	() => {
-		document.querySelector("[id=btoneliminargasto]").disabled = false;
-		document.querySelector("[form=formactualizargasto]").disabled = false;
+		document.querySelector("#btoneliminargasto").disabled = false;					
+		document.querySelector("#btonactualizargasto").disabled = false;
 		return;
 	});
 }
@@ -343,28 +342,6 @@ const getMonths = (anio) => {
 	then(displayMeses).
 	catch(handler.error);
 }
-//$(document).on("pageshow", "#leergastos", (data) => {
-//	util.componentCleaner(document.querySelector("#setgastos"));
-//	const seleanios = document.querySelector("#formbuscargasto #seleanios");
-//	const selemeses = document.querySelector("#formbuscargasto #selemeses");
-//	getUltimateYears();
-//	seleanios.addEventListener("change", () => {
-//		if (seleanios.value == 0) {
-//			alertify.warning("Por favor, selecciona un año.");
-//			return;	
-//		} else getMonths(seleanios.value);	
-//	});
-//	selemeses.addEventListener("change", () => {
-//		if (selemeses.value == 0) {
-//			alertify.warning("Por favor, selecciona un mes.");
-//			return
-//		} else if (seleanios.value == 0) {
-//			alertify.warning("Por favor, selecciona un año.");
-//			return;
-//		} else getGastos(seleanios.value, selemeses.value);
-//	});
-//});
-
 
 window.addEventListener("load", event => {
 	const seleanios = document.querySelector("#formbuscargasto #seleanios");
@@ -385,10 +362,4 @@ window.addEventListener("load", event => {
 			return;
 		} else getGastos(seleanios.value, selemeses.value);
 	});
-
-	//$("#formactualizargasto #selecategorias").selectmenu("refresh");
-//	const formactualizargasto = document.getElementById("formactualizargasto");
-//	formactualizargasto.addEventListener("submit", updateGasto);
-//	const btoneliminargasto = document.getElementById("btoneliminargasto");
-//	btoneliminargasto.addEventListener("click", deleteGasto);
 });

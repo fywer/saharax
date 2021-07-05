@@ -2,10 +2,11 @@ li {
 	padding: .7em;        	
 	border-style: solid;
 	background-color: #f6f6f6;
-	border-color: #f6f6ff;
+	border-color:rgb(222, 222, 222);
 	text-shadow: 0 1px 0 #f3f3f3;
 	color: #333;
-	border-width: 0em .05em .05em .05em;
+	font-size: .9em;
+	border-width: 0em 0em .05em 0em;
 }
 li:first-child {
 	border-radius: .5em .5em 0em 0em;
@@ -13,6 +14,7 @@ li:first-child {
 }
 li:last-child {
 	border-radius: 0em 0em .5em .5em;
+	border-width: 0em 0em 0em 0em;
 }
 a {
 	transition: color .5s;
@@ -22,4 +24,4 @@ a {
 a:hover {
 	color: orange;
 	border-color:  orange;
-}	
+}
