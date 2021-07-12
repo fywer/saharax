@@ -245,7 +245,7 @@ const deleteGasto = (event) => {
 				gastospormes = [];
 			});
 			localStorage.setItem('gastos', JSON.stringify(datatemp));
-			alertify.success("Se ha eliminado con exito el gasto.", 2, () => {
+			alertify.success("Se ha eliminado con exito el gasto.", 1, () => {
 				window.location.replace('/home/gastos');
 			});
 		}).

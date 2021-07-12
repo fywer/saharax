@@ -52,7 +52,7 @@ public class GastoRestController {
 
 	@RequestMapping(method = RequestMethod.PUT)
     public Gasto update(@RequestBody Gasto gasto) {
-		//gasto.getUltimaActualizacion().add(Calendar.DAY_OF_MONTH, 1);
+		gasto.getUltimaActualizacion().add(Calendar.DAY_OF_MONTH, 1);
         return gastoRepository.save(gasto);
     }
 	

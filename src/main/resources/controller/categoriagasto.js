@@ -3,28 +3,18 @@ import handler from "./util/handler.js";
 import util from "./util/util.js";
 import { Categoria } from "./modules/categoria.js";
 
-const deleteCategoria = (categoria) => {
-	alertify.confirm('Saharax', "¿Esta seguro de eliminar la categoría?",
-	() => {
-		const url = "/categoria".concat("/"+categoria.getId);
-		const request = {
-			method : 'DELETE',
-			headers : {
-				'Authorization' : sessionStorage.getItem("token")
-			}
-		}
-		fetch(url, request).
-		then(handler.responseText).
-		then( () => {
-			document.getElementById(categoria.getId).remove();
-			alertify.success("Se ha eliminado la categoría con exito.");
-		}).
-		catch(handler.error);	
-	},
-	() => {
-		return	
-	}).set('labels', {ok: 'Eliminar', cancel: 'Cancelar'});
+const erase = async (url, request) => {
+	const response = await fetch(url, request).
+	then(handler.responseText).
+	then( data => {
+		console.warn(data);
+		return new Promise( resolve => {
+			resolve(data);
+		});
+	}).
+	catch(handler.error);
 }
+
 const saveCategoria = (event) => {
 	document.querySelector("[form=formagregarcategoria]").disabled = true;
 	const url = '/categoria';
@@ -66,7 +56,25 @@ const insertCategoria = (categoria) => {
 	let itemLink = document.createElement("a");
 	itemLink.addEventListener('click', (event) => {
 		event.preventDefault();
-		deleteCategoria(categoria);
+		alertify.confirm('Borrar Categoría', "¿Esta seguro de eliminar la categoría?",
+		() => {
+			const url = "/categoria".concat("/"+categoria.getId);
+			const request = {
+				method : 'DELETE',
+				headers : {
+					'Authorization' : sessionStorage.getItem("token")
+				}
+			}
+			const response = erase(url, request);
+			console.log(typeof response);
+			response.then( () => {
+				document.getElementById(categoria.getId).remove();
+				alertify.success("Se ha eliminado la categoría.");
+			});		
+		},
+		() => {
+			return
+		}).set('labels', {ok: 'Eliminar', cancel: 'Cancelar'});
 	});
 	itemLink.appendChild(document.createTextNode(categoria.getDsCategoria) );
 	const selecategorias = document.querySelector("#selecategorias");
@@ -83,10 +91,29 @@ const displayCategorias = (categorias) => {
 		let itemOption = document.createElement("li");
 		itemOption.setAttribute("id", categoria.getId);
 		let itemLink = document.createElement("a");
-		itemLink.addEventListener('click', (event) => {
+		itemLink.addEventListener('click',  (event) => {
 			event.preventDefault();
-			deleteCategoria(categoria);
+			alertify.confirm('Borrar Categoría', "¿Esta seguro de eliminar la categoría?",
+			() => {
+				const url = "/categoria".concat("/"+categoria.getId);
+				const request = {
+					method : 'DELETE',
+					headers : {
+						'Authorization' : sessionStorage.getItem("token")
+					}
+				}
+				const response = erase(url, request);
+				console.log(typeof response);
+				response.then( () => {
+					document.getElementById(categoria.getId).remove();
+					alertify.success("Se ha eliminado la categoría.");
+				});		
+			},
+			() => {
+				return
+			}).set('labels', {ok: 'Eliminar', cancel: 'Cancelar'});
 		});
+		 
 		itemLink.appendChild(document.createTextNode(categoria.getDsCategoria) );
 		itemOption.appendChild(itemLink);
 		selecategorias.appendChild(itemOption);
